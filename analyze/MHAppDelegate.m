@@ -14,7 +14,6 @@
 
 static AudioDeviceIOProcID procId;
 static AudioDeviceID deviceId;
-//static AudioStreamBasicDescription description;
 static UInt32 frameSize;
 static DSPSplitComplex deinterleavedSamples;
 const static int NUM_CHANNELS = 2;
@@ -51,11 +50,8 @@ OSStatus RenderAudio(AudioObjectID          inDevice,
         kAudioObjectPropertyScopeGlobal,
         kAudioObjectPropertyElementMaster
     };
-
     error = AudioObjectGetPropertyData(kAudioObjectSystemObject, &inputDeviceAddress, 0, NULL, &deviceIdSize, &deviceId);
     if (error) printf("\n* it's an error: %i *\n\n", error);
-    printf("device id: %u\n", deviceId);
-
 
     UInt32 frameSizeSize = sizeof(UInt32);
     AudioObjectPropertyAddress bufferFrameSizeAddress = {
@@ -65,16 +61,6 @@ OSStatus RenderAudio(AudioObjectID          inDevice,
     };
     error = AudioObjectGetPropertyData(deviceId, &bufferFrameSizeAddress, 0, NULL, &frameSizeSize, &frameSize);
     if (error) printf("\n* it's an error: %i *\n\n", error);
-    printf("frame size: %u\n", frameSize);
-
-//    UInt32 descriptionSize = sizeof(AudioStreamBasicDescription);
-//    AudioObjectPropertyAddress descriptionAddress = {
-//        kAudioStreamPropertyVirtualFormat,
-//        kAudioObjectPropertyScopeInput,
-//        kAudioObjectPropertyElementMaster
-//    };
-//    AudioObjectGetPropertyData(deviceId, &descriptionAddress, 0, NULL, &descriptionSize, &description);
-
 
     deinterleavedSamples.realp = malloc(sizeof(Float32) * frameSize);
     deinterleavedSamples.imagp = malloc(sizeof(Float32) * frameSize);
