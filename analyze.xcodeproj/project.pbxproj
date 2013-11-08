@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		BF453025182CB49600CE042D /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF453024182CB49600CE042D /* Accelerate.framework */; };
 		BF6E6A8D18131A4400F74101 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = BF6E6A8B18131A4400F74101 /* InfoPlist.strings */; };
 		BF6E6A8F18131A4400F74101 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = BF6E6A8E18131A4400F74101 /* main.m */; };
 		BF6E6A9318131A4400F74101 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = BF6E6A9118131A4400F74101 /* Credits.rtf */; };
@@ -32,10 +33,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		BF453024182CB49600CE042D /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
 		BF6E6A7F18131A4400F74101 /* analyze.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = analyze.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BF6E6A8218131A4400F74101 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
-		BF6E6A8518131A4400F74101 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
-		BF6E6A8718131A4400F74101 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		BF6E6A8A18131A4400F74101 /* analyze-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "analyze-Info.plist"; sourceTree = "<group>"; };
 		BF6E6A8C18131A4400F74101 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		BF6E6A8E18131A4400F74101 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -58,8 +58,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				BF6E6AB8181341D100F74101 /* CoreAudio.framework in Frameworks */,
+				BF453025182CB49600CE042D /* Accelerate.framework in Frameworks */,
 				BF6E6AB618133DD900F74101 /* Cocoa.framework in Frameworks */,
+				BF6E6AB8181341D100F74101 /* CoreAudio.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -97,21 +98,12 @@
 		BF6E6A8118131A4400F74101 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				BF6E6AB7181341D100F74101 /* CoreAudio.framework */,
+				BF453024182CB49600CE042D /* Accelerate.framework */,
 				BF6E6A8218131A4400F74101 /* Cocoa.framework */,
+				BF6E6AB7181341D100F74101 /* CoreAudio.framework */,
 				BF6E6AA118131A4400F74101 /* XCTest.framework */,
-				BF6E6A8418131A4400F74101 /* Other Frameworks */,
 			);
 			name = Frameworks;
-			sourceTree = "<group>";
-		};
-		BF6E6A8418131A4400F74101 /* Other Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				BF6E6A8518131A4400F74101 /* AppKit.framework */,
-				BF6E6A8718131A4400F74101 /* Foundation.framework */,
-			);
-			name = "Other Frameworks";
 			sourceTree = "<group>";
 		};
 		BF6E6A8818131A4400F74101 /* analyze */ = {
@@ -467,6 +459,7 @@
 				BF6E6AB218131A4400F74101 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		BF6E6AB318131A4400F74101 /* Build configuration list for PBXNativeTarget "analyzeTests" */ = {
 			isa = XCConfigurationList;
@@ -475,6 +468,7 @@
 				BF6E6AB518131A4400F74101 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

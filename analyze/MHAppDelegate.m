@@ -6,16 +6,20 @@
 //  Copyright (c) 2013 Mike Hays. All rights reserved.
 //
 
+#import <Accelerate/Accelerate.h>
 #import <CoreAudio/CoreAudio.h>
 #import "MHAppDelegate.h"
 
 @implementation MHAppDelegate
 
-static AudioDeviceIOProcID procId = NULL;
-static AudioDeviceID deviceId = 0;
-static AudioStreamBasicDescription description;
+static AudioDeviceIOProcID procId;
+static AudioDeviceID deviceId;
+//static AudioStreamBasicDescription description;
+static UInt32 frameSize;
+static DSPSplitComplex deinterleavedSamples;
+const static int NUM_CHANNELS = 2;
 
-OSStatus renderAudio(AudioObjectID          inDevice,
+OSStatus RenderAudio(AudioObjectID          inDevice,
                      const AudioTimeStamp*  inNow,
                      const AudioBufferList* inInputData,
                      const AudioTimeStamp*  inInputTime,
@@ -23,25 +27,14 @@ OSStatus renderAudio(AudioObjectID          inDevice,
                      const AudioTimeStamp*  inOutputTime,
                      void*                  inClientData)
 {
-//    printf("we haz audio! bufferlist: %p\n", inInputData);
     UInt32 numberBuffers = inInputData->mNumberBuffers;
-    printf("we have %u buffers\n", numberBuffers);
     for (int buffer = 0; buffer < numberBuffers; buffer++) {
-        int numberChannels = inInputData->mBuffers[buffer].mNumberChannels;
-        int bufferSize = inInputData->mBuffers[buffer].mDataByteSize;
-        printf("one of them is at %p\n", &inInputData->mBuffers[buffer]);
-        printf("- it has %u channels\n", numberChannels);
-        printf("- it has %u data bytes\n", bufferSize);
+        Float32 *data = inInputData->mBuffers[buffer].mData;
 
         // de-interleave
-        Float32 *data = inInputData->mBuffers[buffer].mData;
-        for (int frame = 0; frame < bufferSize / description.mBytesPerFrame; frame++) {
-            Float32 sample = data[frame];
-            printf("%f ", sample);
-        }
+        vDSP_ctoz((const DSPComplex *)data, NUM_CHANNELS, &deinterleavedSamples, 1, frameSize);
+        // doStuff(deinterleavedSamples)
     }
-
-    printf("\n");
 
 //    AudioDeviceStop(deviceId, procId);
 
@@ -63,20 +56,31 @@ OSStatus renderAudio(AudioObjectID          inDevice,
     if (error) printf("\n* it's an error: %i *\n\n", error);
     printf("device id: %u\n", deviceId);
 
-    UInt32 descriptionSize = sizeof(AudioStreamBasicDescription);
-    AudioObjectPropertyAddress descriptionAddress = {
-        kAudioStreamPropertyVirtualFormat,
+
+    UInt32 frameSizeSize = sizeof(UInt32);
+    AudioObjectPropertyAddress bufferFrameSizeAddress = {
+        kAudioDevicePropertyBufferFrameSize,
         kAudioObjectPropertyScopeInput,
         kAudioObjectPropertyElementMaster
     };
-    AudioObjectGetPropertyData(deviceId, &descriptionAddress, 0, NULL, &descriptionSize, &description);
+    error = AudioObjectGetPropertyData(deviceId, &bufferFrameSizeAddress, 0, NULL, &frameSizeSize, &frameSize);
+    if (error) printf("\n* it's an error: %i *\n\n", error);
+    printf("frame size: %u\n", frameSize);
+
+//    UInt32 descriptionSize = sizeof(AudioStreamBasicDescription);
+//    AudioObjectPropertyAddress descriptionAddress = {
+//        kAudioStreamPropertyVirtualFormat,
+//        kAudioObjectPropertyScopeInput,
+//        kAudioObjectPropertyElementMaster
+//    };
+//    AudioObjectGetPropertyData(deviceId, &descriptionAddress, 0, NULL, &descriptionSize, &description);
 
 
+    deinterleavedSamples.realp = malloc(sizeof(Float32) * frameSize);
+    deinterleavedSamples.imagp = malloc(sizeof(Float32) * frameSize);
 
-    AudioDeviceCreateIOProcID(deviceId, &renderAudio, nil, &procId);
+    AudioDeviceCreateIOProcID(deviceId, &RenderAudio, nil, &procId);
     AudioDeviceStart(deviceId, procId);
-
-//    AudioStreamID blah;
 }
 
 @end
