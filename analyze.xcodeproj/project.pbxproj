@@ -8,6 +8,10 @@
 
 /* Begin PBXBuildFile section */
 		BF453025182CB49600CE042D /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF453024182CB49600CE042D /* Accelerate.framework */; };
+		BF5ED73D182D85DF00C8A7DF /* MHCoreAudioShovel.m in Sources */ = {isa = PBXBuildFile; fileRef = BF5ED73C182D85DF00C8A7DF /* MHCoreAudioShovel.m */; };
+		BF5ED740182D860D00C8A7DF /* MHOpenGLAnalyzeView.m in Sources */ = {isa = PBXBuildFile; fileRef = BF5ED73F182D860D00C8A7DF /* MHOpenGLAnalyzeView.m */; };
+		BF5ED749182F48D100C8A7DF /* analyze.frag in Resources */ = {isa = PBXBuildFile; fileRef = BF5ED748182F48D100C8A7DF /* analyze.frag */; };
+		BF5ED74A182F490400C8A7DF /* analyze.vert in Resources */ = {isa = PBXBuildFile; fileRef = BF5ED747182F483B00C8A7DF /* analyze.vert */; };
 		BF6E6A8D18131A4400F74101 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = BF6E6A8B18131A4400F74101 /* InfoPlist.strings */; };
 		BF6E6A8F18131A4400F74101 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = BF6E6A8E18131A4400F74101 /* main.m */; };
 		BF6E6A9318131A4400F74101 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = BF6E6A9118131A4400F74101 /* Credits.rtf */; };
@@ -20,6 +24,7 @@
 		BF6E6AAD18131A4400F74101 /* analyzeTests.m in Sources */ = {isa = PBXBuildFile; fileRef = BF6E6AAC18131A4400F74101 /* analyzeTests.m */; };
 		BF6E6AB618133DD900F74101 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF6E6A8218131A4400F74101 /* Cocoa.framework */; };
 		BF6E6AB8181341D100F74101 /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF6E6AB7181341D100F74101 /* CoreAudio.framework */; };
+		BFCFCEA2182CD75400E325E8 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BFCFCEA1182CD75400E325E8 /* OpenGL.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -34,6 +39,12 @@
 
 /* Begin PBXFileReference section */
 		BF453024182CB49600CE042D /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
+		BF5ED73B182D85DF00C8A7DF /* MHCoreAudioShovel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MHCoreAudioShovel.h; sourceTree = "<group>"; };
+		BF5ED73C182D85DF00C8A7DF /* MHCoreAudioShovel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MHCoreAudioShovel.m; sourceTree = "<group>"; };
+		BF5ED73E182D860D00C8A7DF /* MHOpenGLAnalyzeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MHOpenGLAnalyzeView.h; sourceTree = "<group>"; };
+		BF5ED73F182D860D00C8A7DF /* MHOpenGLAnalyzeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MHOpenGLAnalyzeView.m; sourceTree = "<group>"; };
+		BF5ED747182F483B00C8A7DF /* analyze.vert */ = {isa = PBXFileReference; explicitFileType = sourcecode.glsl; path = analyze.vert; sourceTree = "<group>"; };
+		BF5ED748182F48D100C8A7DF /* analyze.frag */ = {isa = PBXFileReference; explicitFileType = sourcecode.glsl; fileEncoding = 4; path = analyze.frag; sourceTree = "<group>"; };
 		BF6E6A7F18131A4400F74101 /* analyze.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = analyze.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BF6E6A8218131A4400F74101 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		BF6E6A8A18131A4400F74101 /* analyze-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "analyze-Info.plist"; sourceTree = "<group>"; };
@@ -51,6 +62,7 @@
 		BF6E6AAA18131A4400F74101 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		BF6E6AAC18131A4400F74101 /* analyzeTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = analyzeTests.m; sourceTree = "<group>"; };
 		BF6E6AB7181341D100F74101 /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = System/Library/Frameworks/CoreAudio.framework; sourceTree = SDKROOT; };
+		BFCFCEA1182CD75400E325E8 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -61,6 +73,7 @@
 				BF453025182CB49600CE042D /* Accelerate.framework in Frameworks */,
 				BF6E6AB618133DD900F74101 /* Cocoa.framework in Frameworks */,
 				BF6E6AB8181341D100F74101 /* CoreAudio.framework in Frameworks */,
+				BFCFCEA2182CD75400E325E8 /* OpenGL.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -79,6 +92,8 @@
 		BF6E6A7618131A4400F74101 = {
 			isa = PBXGroup;
 			children = (
+				BF5ED748182F48D100C8A7DF /* analyze.frag */,
+				BF5ED747182F483B00C8A7DF /* analyze.vert */,
 				BF6E6A8818131A4400F74101 /* analyze */,
 				BF6E6AA618131A4400F74101 /* analyzeTests */,
 				BF6E6A8118131A4400F74101 /* Frameworks */,
@@ -98,6 +113,7 @@
 		BF6E6A8118131A4400F74101 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				BFCFCEA1182CD75400E325E8 /* OpenGL.framework */,
 				BF453024182CB49600CE042D /* Accelerate.framework */,
 				BF6E6A8218131A4400F74101 /* Cocoa.framework */,
 				BF6E6AB7181341D100F74101 /* CoreAudio.framework */,
@@ -114,6 +130,10 @@
 				BF6E6A9718131A4400F74101 /* MainMenu.xib */,
 				BF6E6A9A18131A4400F74101 /* Images.xcassets */,
 				BF6E6A8918131A4400F74101 /* Supporting Files */,
+				BF5ED73B182D85DF00C8A7DF /* MHCoreAudioShovel.h */,
+				BF5ED73C182D85DF00C8A7DF /* MHCoreAudioShovel.m */,
+				BF5ED73E182D860D00C8A7DF /* MHOpenGLAnalyzeView.h */,
+				BF5ED73F182D860D00C8A7DF /* MHOpenGLAnalyzeView.m */,
 			);
 			path = analyze;
 			sourceTree = "<group>";
@@ -225,6 +245,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BF5ED74A182F490400C8A7DF /* analyze.vert in Resources */,
+				BF5ED749182F48D100C8A7DF /* analyze.frag in Resources */,
 				BF6E6A8D18131A4400F74101 /* InfoPlist.strings in Resources */,
 				BF6E6A9B18131A4400F74101 /* Images.xcassets in Resources */,
 				BF6E6A9318131A4400F74101 /* Credits.rtf in Resources */,
@@ -249,6 +271,8 @@
 			files = (
 				BF6E6A8F18131A4400F74101 /* main.m in Sources */,
 				BF6E6A9618131A4400F74101 /* MHAppDelegate.m in Sources */,
+				BF5ED73D182D85DF00C8A7DF /* MHCoreAudioShovel.m in Sources */,
+				BF5ED740182D860D00C8A7DF /* MHOpenGLAnalyzeView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
