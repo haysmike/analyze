@@ -7,15 +7,12 @@
 //
 
 #import "MHAppDelegate.h"
-#import "MHOpenGLAnalyzeView.h"
-#import "MHCoreAudioShovel.h"
 
 @implementation MHAppDelegate
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification
 {
-    MHOpenGLAnalyzeView *view = [[self window] contentView];
-    [view setShovel:[[MHCoreAudioShovel alloc] init]];
+
 }
 
 @end

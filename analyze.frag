@@ -1,6 +1,8 @@
-#version 120
+#version 150
+
+out vec4 fragColor;
 
 void main(void)
 {
-    gl_FragColor = vec4(gl_FragCoord.xy / 320.0, 0.0, 0.0);
+    fragColor = vec4(gl_FragCoord.y / 320.0, 1 - gl_FragCoord.y / 320.0, 0.0, 0.0);
 }
