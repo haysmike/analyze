@@ -12,6 +12,7 @@
 		BF5ED740182D860D00C8A7DF /* MHOpenGLAnalyzeView.m in Sources */ = {isa = PBXBuildFile; fileRef = BF5ED73F182D860D00C8A7DF /* MHOpenGLAnalyzeView.m */; };
 		BF5ED749182F48D100C8A7DF /* analyze.frag in Resources */ = {isa = PBXBuildFile; fileRef = BF5ED748182F48D100C8A7DF /* analyze.frag */; };
 		BF5ED74A182F490400C8A7DF /* analyze.vert in Resources */ = {isa = PBXBuildFile; fileRef = BF5ED747182F483B00C8A7DF /* analyze.vert */; };
+		BF60E799183366AB007F6D16 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF453024182CB49600CE042D /* Accelerate.framework */; };
 		BF6E6A8D18131A4400F74101 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = BF6E6A8B18131A4400F74101 /* InfoPlist.strings */; };
 		BF6E6A8F18131A4400F74101 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = BF6E6A8E18131A4400F74101 /* main.m */; };
 		BF6E6A9318131A4400F74101 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = BF6E6A9118131A4400F74101 /* Credits.rtf */; };
@@ -19,25 +20,17 @@
 		BF6E6A9918131A4400F74101 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = BF6E6A9718131A4400F74101 /* MainMenu.xib */; };
 		BF6E6A9B18131A4400F74101 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BF6E6A9A18131A4400F74101 /* Images.xcassets */; };
 		BF6E6AA218131A4400F74101 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF6E6AA118131A4400F74101 /* XCTest.framework */; };
-		BF6E6AA318131A4400F74101 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF6E6A8218131A4400F74101 /* Cocoa.framework */; };
 		BF6E6AAB18131A4400F74101 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = BF6E6AA918131A4400F74101 /* InfoPlist.strings */; };
 		BF6E6AAD18131A4400F74101 /* ringBufferTests.m in Sources */ = {isa = PBXBuildFile; fileRef = BF6E6AAC18131A4400F74101 /* ringBufferTests.m */; };
-		BF6E6AB618133DD900F74101 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF6E6A8218131A4400F74101 /* Cocoa.framework */; };
 		BF6E6AB8181341D100F74101 /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF6E6AB7181341D100F74101 /* CoreAudio.framework */; };
 		BF7DD9B01832183B00C80DB6 /* MHRingBuffer.m in Sources */ = {isa = PBXBuildFile; fileRef = BF7DD9AF1832183B00C80DB6 /* MHRingBuffer.m */; };
 		BF7DD9CB1833404900C80DB6 /* MHRingBuffer.m in Sources */ = {isa = PBXBuildFile; fileRef = BF7DD9AF1832183B00C80DB6 /* MHRingBuffer.m */; };
+		BF999B41183360C00030EF0F /* fftTests.m in Sources */ = {isa = PBXBuildFile; fileRef = BF999B40183360C00030EF0F /* fftTests.m */; };
+		BF999B44183362030030EF0F /* MHFFT.m in Sources */ = {isa = PBXBuildFile; fileRef = BF999B43183362030030EF0F /* MHFFT.m */; };
+		BF999B45183362030030EF0F /* MHFFT.m in Sources */ = {isa = PBXBuildFile; fileRef = BF999B43183362030030EF0F /* MHFFT.m */; };
+		BFC080041833670B00E5A9C1 /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BFC080031833670B00E5A9C1 /* AppKit.framework */; };
 		BFCFCEA2182CD75400E325E8 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BFCFCEA1182CD75400E325E8 /* OpenGL.framework */; };
 /* End PBXBuildFile section */
-
-/* Begin PBXContainerItemProxy section */
-		BF6E6AA418131A4400F74101 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = BF6E6A7718131A4400F74101 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = BF6E6A7E18131A4400F74101;
-			remoteInfo = analyze;
-		};
-/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		BF453024182CB49600CE042D /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
@@ -48,7 +41,6 @@
 		BF5ED747182F483B00C8A7DF /* analyze.vert */ = {isa = PBXFileReference; explicitFileType = sourcecode.glsl; path = analyze.vert; sourceTree = "<group>"; };
 		BF5ED748182F48D100C8A7DF /* analyze.frag */ = {isa = PBXFileReference; explicitFileType = sourcecode.glsl; fileEncoding = 4; path = analyze.frag; sourceTree = "<group>"; };
 		BF6E6A7F18131A4400F74101 /* analyze.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = analyze.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		BF6E6A8218131A4400F74101 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		BF6E6A8A18131A4400F74101 /* analyze-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "analyze-Info.plist"; sourceTree = "<group>"; };
 		BF6E6A8C18131A4400F74101 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		BF6E6A8E18131A4400F74101 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -66,6 +58,10 @@
 		BF6E6AB7181341D100F74101 /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = System/Library/Frameworks/CoreAudio.framework; sourceTree = SDKROOT; };
 		BF7DD9AE1832183B00C80DB6 /* MHRingBuffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MHRingBuffer.h; sourceTree = "<group>"; };
 		BF7DD9AF1832183B00C80DB6 /* MHRingBuffer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MHRingBuffer.m; sourceTree = "<group>"; };
+		BF999B40183360C00030EF0F /* fftTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = fftTests.m; sourceTree = "<group>"; };
+		BF999B42183362030030EF0F /* MHFFT.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MHFFT.h; sourceTree = "<group>"; };
+		BF999B43183362030030EF0F /* MHFFT.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MHFFT.m; sourceTree = "<group>"; };
+		BFC080031833670B00E5A9C1 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
 		BFCFCEA1182CD75400E325E8 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
@@ -74,8 +70,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BFC080041833670B00E5A9C1 /* AppKit.framework in Frameworks */,
 				BF453025182CB49600CE042D /* Accelerate.framework in Frameworks */,
-				BF6E6AB618133DD900F74101 /* Cocoa.framework in Frameworks */,
 				BF6E6AB8181341D100F74101 /* CoreAudio.framework in Frameworks */,
 				BFCFCEA2182CD75400E325E8 /* OpenGL.framework in Frameworks */,
 			);
@@ -85,8 +81,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				BF6E6AA318131A4400F74101 /* Cocoa.framework in Frameworks */,
 				BF6E6AA218131A4400F74101 /* XCTest.framework in Frameworks */,
+				BF60E799183366AB007F6D16 /* Accelerate.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -117,9 +113,9 @@
 		BF6E6A8118131A4400F74101 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				BFC080031833670B00E5A9C1 /* AppKit.framework */,
 				BFCFCEA1182CD75400E325E8 /* OpenGL.framework */,
 				BF453024182CB49600CE042D /* Accelerate.framework */,
-				BF6E6A8218131A4400F74101 /* Cocoa.framework */,
 				BF6E6AB7181341D100F74101 /* CoreAudio.framework */,
 				BF6E6AA118131A4400F74101 /* XCTest.framework */,
 			);
@@ -140,6 +136,8 @@
 				BF5ED73F182D860D00C8A7DF /* MHOpenGLAnalyzeView.m */,
 				BF7DD9AE1832183B00C80DB6 /* MHRingBuffer.h */,
 				BF7DD9AF1832183B00C80DB6 /* MHRingBuffer.m */,
+				BF999B42183362030030EF0F /* MHFFT.h */,
+				BF999B43183362030030EF0F /* MHFFT.m */,
 			);
 			path = analyze;
 			sourceTree = "<group>";
@@ -159,6 +157,7 @@
 		BF6E6AA618131A4400F74101 /* analyzeTests */ = {
 			isa = PBXGroup;
 			children = (
+				BF999B40183360C00030EF0F /* fftTests.m */,
 				BF6E6AAC18131A4400F74101 /* ringBufferTests.m */,
 				BF6E6AA718131A4400F74101 /* Supporting Files */,
 			);
@@ -205,7 +204,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				BF6E6AA518131A4400F74101 /* PBXTargetDependency */,
 			);
 			name = analyzeTests;
 			productName = analyzeTests;
@@ -221,11 +219,6 @@
 				CLASSPREFIX = MH;
 				LastUpgradeCheck = 0500;
 				ORGANIZATIONNAME = "Mike Hays";
-				TargetAttributes = {
-					BF6E6A9F18131A4400F74101 = {
-						TestTargetID = BF6E6A7E18131A4400F74101;
-					};
-				};
 			};
 			buildConfigurationList = BF6E6A7A18131A4400F74101 /* Build configuration list for PBXProject "analyze" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -278,6 +271,7 @@
 				BF6E6A8F18131A4400F74101 /* main.m in Sources */,
 				BF6E6A9618131A4400F74101 /* MHAppDelegate.m in Sources */,
 				BF5ED73D182D85DF00C8A7DF /* MHCoreAudioShovel.m in Sources */,
+				BF999B44183362030030EF0F /* MHFFT.m in Sources */,
 				BF5ED740182D860D00C8A7DF /* MHOpenGLAnalyzeView.m in Sources */,
 				BF7DD9B01832183B00C80DB6 /* MHRingBuffer.m in Sources */,
 			);
@@ -287,20 +281,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BF999B41183360C00030EF0F /* fftTests.m in Sources */,
 				BF7DD9CB1833404900C80DB6 /* MHRingBuffer.m in Sources */,
 				BF6E6AAD18131A4400F74101 /* ringBufferTests.m in Sources */,
+				BF999B45183362030030EF0F /* MHFFT.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		BF6E6AA518131A4400F74101 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = BF6E6A7E18131A4400F74101 /* analyze */;
-			targetProxy = BF6E6AA418131A4400F74101 /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		BF6E6A8B18131A4400F74101 /* InfoPlist.strings */ = {
@@ -435,7 +423,6 @@
 		BF6E6AB418131A4400F74101 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/analyze.app/Contents/MacOS/analyze";
 				COMBINE_HIDPI_IMAGES = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(DEVELOPER_FRAMEWORKS_DIR)",
@@ -449,7 +436,6 @@
 				);
 				INFOPLIST_FILE = "analyzeTests/analyzeTests-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUNDLE_LOADER)";
 				WRAPPER_EXTENSION = xctest;
 			};
 			name = Debug;
@@ -457,7 +443,6 @@
 		BF6E6AB518131A4400F74101 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/analyze.app/Contents/MacOS/analyze";
 				COMBINE_HIDPI_IMAGES = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(DEVELOPER_FRAMEWORKS_DIR)",
@@ -467,7 +452,6 @@
 				GCC_PREFIX_HEADER = "analyze/analyze-Prefix.pch";
 				INFOPLIST_FILE = "analyzeTests/analyzeTests-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUNDLE_LOADER)";
 				WRAPPER_EXTENSION = xctest;
 			};
 			name = Release;

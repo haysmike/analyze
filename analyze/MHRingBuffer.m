@@ -21,6 +21,7 @@
         _numItems = numItems;
         _itemSize = itemSize;
         _buffer = malloc(_numItems * _itemSize);
+        memset(_buffer, 0, _numItems * _itemSize);
     }
     return self;
 }
@@ -32,42 +33,46 @@
 
 - (void)give:(void *)item
 {
-    if (_state == kMHRingBufferStateOverflowImminent) {
-        _state = kMHRingBufferStateOverflow;
-        NSLog(@"*** RING BUFFER OVERFLOW ***");
-    } else if (_state == kMHRingBufferStateUnderflowImminent) {
-        _state = kMHRingBufferStateNormal;
-    }
+    @synchronized(self) {
+        if (_state == kMHRingBufferStateOverflowImminent) {
+            _state = kMHRingBufferStateOverflow;
+            NSLog(@"*** RING BUFFER OVERFLOW ***");
+        } else if (_state == kMHRingBufferStateUnderflowImminent) {
+            _state = kMHRingBufferStateNormal;
+        }
 
-    memcpy(_buffer + _writeOffset * _itemSize, item, _itemSize);
-    _writeOffset = (_writeOffset + 1) % _numItems;
-    if (_writeOffset == _readOffset) {
-        NSLog(@"ring buffer full, overflow imminent...");
-        _state = kMHRingBufferStateOverflowImminent;
+        memcpy(_buffer + _writeOffset * _itemSize, item, _itemSize);    // TODO: not sure memcpy should be here
+        _writeOffset = (_writeOffset + 1) % _numItems;
+        if (_writeOffset == _readOffset) {
+            _state = kMHRingBufferStateOverflowImminent;
+        }
     }
 }
 
 - (int)size
 {
-    return _itemSize * ((_numItems + _writeOffset - _readOffset) % _numItems);
+    @synchronized(self) {
+        return _itemSize * ((_numItems + _writeOffset - _readOffset) % _numItems);
+    }
 }
 
 - (void *)take
 {
-    if (_state == kMHRingBufferStateUnderflowImminent) {
-        _state = kMHRingBufferStateUnderflow;
-        NSLog(@"*** RING BUFFER UNDERFLOW ***");
-    } else if (_state == kMHRingBufferStateOverflowImminent) {
-        _state = kMHRingBufferStateNormal;
-    }
+    @synchronized(self) {
+        if (_state == kMHRingBufferStateUnderflowImminent) {
+            _state = kMHRingBufferStateUnderflow;
+            NSLog(@"*** RING BUFFER UNDERFLOW ***");
+        } else if (_state == kMHRingBufferStateOverflowImminent) {
+            _state = kMHRingBufferStateNormal;
+        }
 
-    void *elem = _buffer + _readOffset * _itemSize;
-    _readOffset = (_readOffset + 1) % _numItems;
-    if (_readOffset == _writeOffset) {
-        NSLog(@"ring buffer empty, underflow imminent...");
-        _state = kMHRingBufferStateUnderflowImminent;
+        void *elem = _buffer + _readOffset * _itemSize;
+        _readOffset = (_readOffset + 1) % _numItems;
+        if (_readOffset == _writeOffset) {
+            _state = kMHRingBufferStateUnderflowImminent;
+        }
+        return elem;
     }
-    return elem;
 }
 
 @end

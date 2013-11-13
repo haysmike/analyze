@@ -10,10 +10,14 @@
 #import <OpenGL/gl3ext.h>
 #import <Accelerate/Accelerate.h>
 #import <mach/mach_time.h>
+
 #import "MHOpenGLAnalyzeView.h"
+
 #import "MHCoreAudioShovel.h"
+#import "MHFFT.h"
 
 #define FFT_SIZE 4096
+#define NUM_CHANNELS 2
 
 #define BUFFER_OFFSET(i) ((char *)NULL + (i))
 
@@ -26,6 +30,15 @@
 
     Float32 *magnitude;
     int offset;
+
+    FFTSetup fftSetup;
+    Float32 *window;
+    Float32 *in_real;
+    Float32 *leftChannelData;
+    DSPSplitComplex split_data;
+    vDSP_Length LOG2N;
+
+    MHFFT *_fft;
 }
 
 - (id)initWithCoder:(NSCoder *)aDecoder
@@ -70,7 +83,7 @@
 
 
 
-    glPointSize(2.0);
+//    glPointSize(2.0);
 
 
 
@@ -104,103 +117,49 @@
 
     glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
-
-    Float32 *in_real = (Float32 *) malloc(FFT_SIZE * sizeof(float));
-//    Float32 *out_real = (Float32 *) malloc(FFT_SIZE * sizeof(float));
-    __block DSPSplitComplex split_data;
-    split_data.realp = (Float32 *) malloc(FFT_SIZE / 2 * sizeof(float));
-    split_data.imagp = (Float32 *) malloc(FFT_SIZE / 2 * sizeof(float));
-
-    Float32 *window = (Float32 *) malloc(sizeof(float) * FFT_SIZE);
-    memset(window, 0, sizeof(float) * FFT_SIZE);
-    vDSP_hann_window(window, FFT_SIZE, vDSP_HANN_DENORM);
-
-//    Float32 scale = 1.0f / (float)(4.0f * FFT_SIZE);
-
-    // allocate the fft object once
-    vDSP_Length LOG2N = log2f(FFT_SIZE);
-    FFTSetup fftSetup = vDSP_create_fftsetup(LOG2N, FFT_RADIX2);
-
-    magnitude = malloc(FFT_SIZE / 2 * sizeof(Float32));
-
-    Float32 *leftChannelData = malloc(FFT_SIZE * sizeof(Float32));
-    Float32 *rightChannelData = malloc(FFT_SIZE * sizeof(Float32));
-    __block DSPSplitComplex deinterleavedSamples;
-//    deinterleavedSamples.realp = leftChannelData;
-//    deinterleavedSamples.imagp = rightChannelData;
-
-    _shovel = [[MHCoreAudioShovel alloc] initWithIOBlock:^(const AudioTimeStamp *inNow, const AudioBufferList *inInputData, const AudioTimeStamp *inInputTime, AudioBufferList *outOutputData, const AudioTimeStamp *inOutputTime) {
-        for (int bufferIndex = 0; bufferIndex < inInputData->mNumberBuffers; bufferIndex++) {
-            AudioBuffer buffer = inInputData->mBuffers[bufferIndex];
-//            memcpy(data + offset * 512, buffer.mData, buffer.mDataByteSize);
-            int memOffset = offset * 512 * sizeof(Float32);
-            deinterleavedSamples.realp = leftChannelData + memOffset;
-            deinterleavedSamples.imagp = rightChannelData + memOffset;
-            vDSP_ctoz((const DSPComplex *)buffer.mData, buffer.mNumberChannels, &deinterleavedSamples, 1, 512);
-        }
-        offset++;
-        if (offset == 8) {
-            vDSP_vmul(leftChannelData, 1, window, 1, in_real, 1, FFT_SIZE);
-            vDSP_ctoz((DSPComplex *) in_real, 2, &split_data, 1, FFT_SIZE / 2);
-
-            //convert to split complex format with evens in real and odds in imag
-//            vDSP_ctoz((DSPComplex *) leftChannelData, 2, &split_data, 1, FFT_SIZE / 2);
-
-            //calc fft
-            vDSP_fft_zrip(fftSetup, &split_data, 1, LOG2N, FFT_FORWARD);
-
-            split_data.imagp[0] = 0.0;
-
-            for (int i = 0; i < FFT_SIZE / 2; i++) {
-                //compute power
-                float power = split_data.realp[i]*split_data.realp[i] + split_data.imagp[i]*split_data.imagp[i];
-
-                //compute magnitude and phase
-                magnitude[i] = sqrtf(power);
-                //                phase[i] = atan2f(split_data.imagp[i], split_data.realp[i]);
-            }
-
-            dispatch_async(dispatch_get_main_queue(), ^{
-//                NSLog(@"gogogogog!");
-                [self setNeedsDisplay:YES];
-            });
-        }
-        offset %= 8;
-    }];
+    _fft = [[MHFFT alloc] initWithLength:FFT_SIZE];
+    _shovel = [[MHCoreAudioShovel alloc] initWithBufferSize:NUM_CHANNELS * FFT_SIZE * sizeof(Float32)];
 }
 
 - (void)drawRect:(NSRect)dirtyRect
 {
 	[super drawRect:dirtyRect];
 
-    static int i = 0;
-    GLfloat whiteness = (float)i / 1024.0;
-    glClearColor(whiteness, whiteness, whiteness, 0.0);
-
-    _err = glGetError();
-    glClear(GL_COLOR_BUFFER_BIT);
-    glBindVertexArray(_vao);
-    glBufferData(GL_ARRAY_BUFFER, FFT_SIZE / 2 * sizeof(Float32), magnitude, GL_STATIC_DRAW);
+    @synchronized(self) {
+        magnitude = [_fft forward:[_shovel getBuffer]];
 
 
-    glDrawArrays(GL_LINE_STRIP, 0, FFT_SIZE / 2);
-    glSwapAPPLE();
+        static int i = 0;
+        GLfloat whiteness = (float)i / 1024.0;
+        glClearColor(whiteness, whiteness, whiteness, 0.0);
+
+        _err = glGetError();
+        glClear(GL_COLOR_BUFFER_BIT);
+        glBindVertexArray(_vao);
+        glBufferData(GL_ARRAY_BUFFER, FFT_SIZE / 2 * sizeof(Float32), magnitude, GL_STATIC_DRAW);
 
 
-    if (!i) {
-        static uint64_t t = 0;
-        double dt = (double) (mach_absolute_time() - t) / (double) 1000000000;
-        if (t > 0) {
-            NSLog(@"rendered 1024 times in %lf seconds, %f fps", dt, 1024.0 / (float)dt);
-        }
-        t = mach_absolute_time();
+        glDrawArrays(GL_LINE_STRIP, 0, FFT_SIZE / 2);
+        glSwapAPPLE();
     }
-    i++;
-    i = i % 1024;
+//    glFlush();
 
-//    dispatch_async(dispatch_get_main_queue(), ^{
-//        [self setNeedsDisplay:YES];
-//    });
+//    if (!i) {
+//        static uint64_t t = 0;
+//        double dt = (double) (mach_absolute_time() - t) / (double) 1000000000;
+//        if (t > 0) {
+//            dispatch_async(dispatch_get_main_queue(), ^{
+//                NSLog(@"rendered 1024 times in %lf seconds, %f fps", dt, 1024.0 / (float)dt);
+//            });
+//        }
+//        t = mach_absolute_time();
+//    }
+//    i++;
+//    i = i % 1024;
+
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self setNeedsDisplay:YES];
+    });
 }
 
 - (const GLchar *)loadShaderFromFile:(NSString *)fileName

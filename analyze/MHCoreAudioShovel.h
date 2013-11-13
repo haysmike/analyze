@@ -6,16 +6,12 @@
 //  Copyright (c) 2013 Mike Hays. All rights reserved.
 //
 
-#import <CoreAudio/CoreAudio.h>
-
 @interface MHCoreAudioShovel : NSObject
 
-- (id)initWithIOBlock:(AudioDeviceIOBlock)block;
+- (id)initWithBufferSize:(int)size;
+- (void *)getBuffer;
 
-@property (readonly, assign) UInt32 frameSize;
-
-//@property (readonly, assign) Float32 *buffer;
-//@property (readonly, assign) Float32 *leftChannelBuffer;
-//@property (readonly, assign) Float32 *rightChannelBuffer;
+@property (readonly) UInt32 numChannels;
+//@property (readonly) UInt32 frameSize;
 
 @end
