@@ -21,9 +21,11 @@
 		BF6E6AA218131A4400F74101 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF6E6AA118131A4400F74101 /* XCTest.framework */; };
 		BF6E6AA318131A4400F74101 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF6E6A8218131A4400F74101 /* Cocoa.framework */; };
 		BF6E6AAB18131A4400F74101 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = BF6E6AA918131A4400F74101 /* InfoPlist.strings */; };
-		BF6E6AAD18131A4400F74101 /* analyzeTests.m in Sources */ = {isa = PBXBuildFile; fileRef = BF6E6AAC18131A4400F74101 /* analyzeTests.m */; };
+		BF6E6AAD18131A4400F74101 /* ringBufferTests.m in Sources */ = {isa = PBXBuildFile; fileRef = BF6E6AAC18131A4400F74101 /* ringBufferTests.m */; };
 		BF6E6AB618133DD900F74101 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF6E6A8218131A4400F74101 /* Cocoa.framework */; };
 		BF6E6AB8181341D100F74101 /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF6E6AB7181341D100F74101 /* CoreAudio.framework */; };
+		BF7DD9B01832183B00C80DB6 /* MHRingBuffer.m in Sources */ = {isa = PBXBuildFile; fileRef = BF7DD9AF1832183B00C80DB6 /* MHRingBuffer.m */; };
+		BF7DD9CB1833404900C80DB6 /* MHRingBuffer.m in Sources */ = {isa = PBXBuildFile; fileRef = BF7DD9AF1832183B00C80DB6 /* MHRingBuffer.m */; };
 		BFCFCEA2182CD75400E325E8 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BFCFCEA1182CD75400E325E8 /* OpenGL.framework */; };
 /* End PBXBuildFile section */
 
@@ -60,8 +62,10 @@
 		BF6E6AA118131A4400F74101 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		BF6E6AA818131A4400F74101 /* analyzeTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "analyzeTests-Info.plist"; sourceTree = "<group>"; };
 		BF6E6AAA18131A4400F74101 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		BF6E6AAC18131A4400F74101 /* analyzeTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = analyzeTests.m; sourceTree = "<group>"; };
+		BF6E6AAC18131A4400F74101 /* ringBufferTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ringBufferTests.m; sourceTree = "<group>"; };
 		BF6E6AB7181341D100F74101 /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = System/Library/Frameworks/CoreAudio.framework; sourceTree = SDKROOT; };
+		BF7DD9AE1832183B00C80DB6 /* MHRingBuffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MHRingBuffer.h; sourceTree = "<group>"; };
+		BF7DD9AF1832183B00C80DB6 /* MHRingBuffer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MHRingBuffer.m; sourceTree = "<group>"; };
 		BFCFCEA1182CD75400E325E8 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
@@ -134,6 +138,8 @@
 				BF5ED73C182D85DF00C8A7DF /* MHCoreAudioShovel.m */,
 				BF5ED73E182D860D00C8A7DF /* MHOpenGLAnalyzeView.h */,
 				BF5ED73F182D860D00C8A7DF /* MHOpenGLAnalyzeView.m */,
+				BF7DD9AE1832183B00C80DB6 /* MHRingBuffer.h */,
+				BF7DD9AF1832183B00C80DB6 /* MHRingBuffer.m */,
 			);
 			path = analyze;
 			sourceTree = "<group>";
@@ -153,7 +159,7 @@
 		BF6E6AA618131A4400F74101 /* analyzeTests */ = {
 			isa = PBXGroup;
 			children = (
-				BF6E6AAC18131A4400F74101 /* analyzeTests.m */,
+				BF6E6AAC18131A4400F74101 /* ringBufferTests.m */,
 				BF6E6AA718131A4400F74101 /* Supporting Files */,
 			);
 			path = analyzeTests;
@@ -273,6 +279,7 @@
 				BF6E6A9618131A4400F74101 /* MHAppDelegate.m in Sources */,
 				BF5ED73D182D85DF00C8A7DF /* MHCoreAudioShovel.m in Sources */,
 				BF5ED740182D860D00C8A7DF /* MHOpenGLAnalyzeView.m in Sources */,
+				BF7DD9B01832183B00C80DB6 /* MHRingBuffer.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -280,7 +287,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				BF6E6AAD18131A4400F74101 /* analyzeTests.m in Sources */,
+				BF7DD9CB1833404900C80DB6 /* MHRingBuffer.m in Sources */,
+				BF6E6AAD18131A4400F74101 /* ringBufferTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
