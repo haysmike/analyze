@@ -117,6 +117,8 @@
 
     glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
+//    magnitude = malloc(NUM_CHANNELS * FFT_SIZE * sizeof(Float32));
+
     _fft = [[MHFFT alloc] initWithLength:FFT_SIZE];
     _shovel = [[MHCoreAudioShovel alloc] initWithBufferSize:NUM_CHANNELS * FFT_SIZE * sizeof(Float32)];
 }
@@ -125,37 +127,14 @@
 {
 	[super drawRect:dirtyRect];
 
-    @synchronized(self) {
-        magnitude = [_fft forward:[_shovel getBuffer]];
+    magnitude = [_fft forward:[_shovel getBuffer]];
+    glClear(GL_COLOR_BUFFER_BIT);
+    glBindVertexArray(_vao);
+    glBufferData(GL_ARRAY_BUFFER, FFT_SIZE / 2 * sizeof(Float32), magnitude, GL_STATIC_DRAW);
+    glDrawArrays(GL_LINE_STRIP, 0, FFT_SIZE / 2);
+    glSwapAPPLE();
 
-
-        static int i = 0;
-        GLfloat whiteness = (float)i / 1024.0;
-        glClearColor(whiteness, whiteness, whiteness, 0.0);
-
-        _err = glGetError();
-        glClear(GL_COLOR_BUFFER_BIT);
-        glBindVertexArray(_vao);
-        glBufferData(GL_ARRAY_BUFFER, FFT_SIZE / 2 * sizeof(Float32), magnitude, GL_STATIC_DRAW);
-
-
-        glDrawArrays(GL_LINE_STRIP, 0, FFT_SIZE / 2);
-        glSwapAPPLE();
-    }
-//    glFlush();
-
-//    if (!i) {
-//        static uint64_t t = 0;
-//        double dt = (double) (mach_absolute_time() - t) / (double) 1000000000;
-//        if (t > 0) {
-//            dispatch_async(dispatch_get_main_queue(), ^{
-//                NSLog(@"rendered 1024 times in %lf seconds, %f fps", dt, 1024.0 / (float)dt);
-//            });
-//        }
-//        t = mach_absolute_time();
-//    }
-//    i++;
-//    i = i % 1024;
+    // TODO: performance analysis
 
     dispatch_async(dispatch_get_main_queue(), ^{
         [self setNeedsDisplay:YES];

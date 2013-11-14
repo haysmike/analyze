@@ -32,7 +32,6 @@
 
         _window = (Float32 *) malloc(sizeof(float) * _length);
         memset(_window, 0, sizeof(float) * _length);
-//        vDSP_hann_window(_window, _length, vDSP_HANN_DENORM);    //
         vDSP_hamm_window(_window, _length, 0);
 
         //    Float32 scale = 1.0f / (float)(4.0f * _size);
@@ -65,9 +64,14 @@
 - (Float32 *)forward:(Float32 *)interleavedSamples
 {
     vDSP_ctoz((DSPComplex *)interleavedSamples, 2, &_deinterleavedSamples, 1, _length);
+
+
     vDSP_vmul(_deinterleavedSamples.realp, 1, _window, 1, _samples, 1, _length);
     vDSP_ctoz((DSPComplex *)_samples, 2, &_splitSamples, 1, _length / 2);
-//    vDSP_vmul(_deinterleavedSamples.imagp, 1, _window, 1, _rightSplitSamples.realp, 1, _length);
+
+//    vDSP_ctoz((DSPComplex *)_deinterleavedSamples.realp, 2, &_splitSamples, 1, _length / 2);
+
+
     vDSP_fft_zrip(_setup, &_splitSamples, 1, _log2Length, FFT_FORWARD);
 
     _splitSamples.imagp[0] = 0.0;   // wtf? does this have something to do with packing?

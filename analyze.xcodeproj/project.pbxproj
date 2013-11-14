@@ -25,7 +25,7 @@
 		BF6E6AB8181341D100F74101 /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF6E6AB7181341D100F74101 /* CoreAudio.framework */; };
 		BF7DD9B01832183B00C80DB6 /* MHRingBuffer.m in Sources */ = {isa = PBXBuildFile; fileRef = BF7DD9AF1832183B00C80DB6 /* MHRingBuffer.m */; };
 		BF7DD9CB1833404900C80DB6 /* MHRingBuffer.m in Sources */ = {isa = PBXBuildFile; fileRef = BF7DD9AF1832183B00C80DB6 /* MHRingBuffer.m */; };
-		BF999B41183360C00030EF0F /* fftTests.m in Sources */ = {isa = PBXBuildFile; fileRef = BF999B40183360C00030EF0F /* fftTests.m */; };
+		BF862EF0183387140088A372 /* fftTests.m in Sources */ = {isa = PBXBuildFile; fileRef = BF999B40183360C00030EF0F /* fftTests.m */; };
 		BF999B44183362030030EF0F /* MHFFT.m in Sources */ = {isa = PBXBuildFile; fileRef = BF999B43183362030030EF0F /* MHFFT.m */; };
 		BF999B45183362030030EF0F /* MHFFT.m in Sources */ = {isa = PBXBuildFile; fileRef = BF999B43183362030030EF0F /* MHFFT.m */; };
 		BFC080041833670B00E5A9C1 /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BFC080031833670B00E5A9C1 /* AppKit.framework */; };
@@ -281,7 +281,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				BF999B41183360C00030EF0F /* fftTests.m in Sources */,
+				BF862EF0183387140088A372 /* fftTests.m in Sources */,
 				BF7DD9CB1833404900C80DB6 /* MHRingBuffer.m in Sources */,
 				BF6E6AAD18131A4400F74101 /* ringBufferTests.m in Sources */,
 				BF999B45183362030030EF0F /* MHFFT.m in Sources */,

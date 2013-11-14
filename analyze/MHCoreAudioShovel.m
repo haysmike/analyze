@@ -13,9 +13,6 @@
 
 #import "MHRingBuffer.h"
 
-//UInt32 samplesPerFrame;
-//DSPSplitComplex deinterleavedSamples;
-
 @implementation MHCoreAudioShovel {
     AudioDeviceIOProcID _procId;
     AudioDeviceID _deviceId;
@@ -23,6 +20,7 @@
     int _frameByteSize;
     int _numFrames;
     Float32 *_buffer;
+    int _shift;;
 }
 
 - (id)initWithBufferSize:(int)size
@@ -53,13 +51,16 @@
         _numChannels = streamConfiguration.mBuffers[0].mNumberChannels;
         _frameByteSize = streamConfiguration.mBuffers[0].mDataByteSize;
         _numFrames = size / _frameByteSize;
+        _shift = (_numFrames - 1) * _frameByteSize / sizeof(Float32);
 
         _buffer = malloc(size);
 
         _ringBuffer = [[MHRingBuffer alloc] initWithCapacity:_numFrames * 2 andItemSize:_frameByteSize];
 
         AudioDeviceCreateIOProcIDWithBlock(&_procId, _deviceId, NULL, ^(const AudioTimeStamp *inNow, const AudioBufferList *inInputData, const AudioTimeStamp *inInputTime, AudioBufferList *outOutputData, const AudioTimeStamp *inOutputTime) {
-            [_ringBuffer give:inInputData->mBuffers[0].mData];
+            @synchronized(_ringBuffer) {
+                [_ringBuffer give:inInputData->mBuffers[0].mData];
+            }
         });
     }
     return self;
@@ -70,19 +71,21 @@
     free(_buffer);
 }
 
-- (void *)getBuffer // dig?
+- (void *)getBuffer
 {
     static BOOL started = NO;
     if (!started)
         AudioDeviceStart(_deviceId, _procId);
 
     // take all ringbuffer frames -> internal buffer
-    if ([_ringBuffer state] == kMHRingBufferStateNormal || [_ringBuffer state] == kMHRingBufferStateOverflowImminent) {
-        int offset = (_numFrames - 1) * _frameByteSize;
-        while ([_ringBuffer size]) {
-            // probably inefficient
-            memmove(_buffer, _buffer + _frameByteSize, offset);
-            memcpy(_buffer + offset, [_ringBuffer take], _frameByteSize);
+    @synchronized(_ringBuffer) {
+        if ([_ringBuffer state] == kMHRingBufferStateNormal || [_ringBuffer state] == kMHRingBufferStateOverflowImminent) {
+            while ([_ringBuffer size]) {
+//                // probably inefficient
+                memmove(_buffer, _buffer + _frameByteSize, _shift);
+                Float32 *ptr = [_ringBuffer take];
+                memcpy(_buffer + _shift, ptr, _frameByteSize);
+            }
         }
     }
     return _buffer;
