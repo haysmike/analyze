@@ -55,7 +55,7 @@
 
         _buffer = malloc(size);
 
-        _ringBuffer = [[MHRingBuffer alloc] initWithCapacity:_numFrames * 2 andItemSize:_frameByteSize];
+        _ringBuffer = [[MHRingBuffer alloc] initWithCapacity:_numFrames * 4 andItemSize:_frameByteSize];
 
         AudioDeviceCreateIOProcIDWithBlock(&_procId, _deviceId, NULL, ^(const AudioTimeStamp *inNow, const AudioBufferList *inInputData, const AudioTimeStamp *inInputTime, AudioBufferList *outOutputData, const AudioTimeStamp *inOutputTime) {
             @synchronized(_ringBuffer) {
