@@ -28,15 +28,7 @@
     GLuint _program;
     GLenum _err;
 
-    Float32 *magnitude;
-    int offset;
-
-    FFTSetup fftSetup;
-    Float32 *window;
-    Float32 *in_real;
-    Float32 *leftChannelData;
-    DSPSplitComplex split_data;
-    vDSP_Length LOG2N;
+    Float32 *_magnitudes;
 
     MHFFT *_fft;
 
@@ -93,19 +85,13 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink,
 	[super prepareOpenGL];
 	[self initGL];
 	CVDisplayLinkCreateWithActiveCGDisplays(&displayLink);
-
-	// Set the renderer output callback function
 	CVDisplayLinkSetOutputCallback(displayLink, &MyDisplayLinkCallback, (__bridge void *)(self));
-
-	// Set the display link for the current renderer
 	CGLContextObj cglContext = [[self openGLContext] CGLContextObj];
 	CGLPixelFormatObj cglPixelFormat = [[self pixelFormat] CGLPixelFormatObj];
 	CVDisplayLinkSetCurrentCGDisplayFromOpenGLContext(displayLink, cglContext, cglPixelFormat);
 
-	// Activate the display link
 	CVDisplayLinkStart(displayLink);
 
-	// Register to be notified when the window closes so we can stop the displaylink
 	[[NSNotificationCenter defaultCenter] addObserver:self
 											 selector:@selector(windowWillClose:)
 												 name:NSWindowWillCloseNotification
@@ -114,10 +100,6 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink,
 
 - (void)windowWillClose:(NSNotification*)notification
 {
-	// Stop the display link when the window is closing because default
-	// OpenGL render buffers will be destroyed.  If display link continues to
-	// fire without renderbuffers, OpenGL draw calls will set errors.
-
 	CVDisplayLinkStop(displayLink);
 }
 
@@ -217,10 +199,10 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink,
 	CGLLockContext([[self openGLContext] CGLContextObj]);
 
 	{
-        magnitude = [_fft forward:[_shovel getBuffer]];
+        _magnitudes = [_fft forward:[_shovel getBuffer]];
         glClear(GL_COLOR_BUFFER_BIT);
         glBindVertexArray(_vao);
-        glBufferData(GL_ARRAY_BUFFER, FFT_SIZE / 2 * sizeof(Float32), magnitude, GL_STATIC_DRAW);
+        glBufferData(GL_ARRAY_BUFFER, FFT_SIZE / 2 * sizeof(Float32), _magnitudes, GL_STATIC_DRAW);
         glDrawArrays(GL_LINE_STRIP, 0, FFT_SIZE / 2);
     }
 
