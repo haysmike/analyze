@@ -17,6 +17,7 @@
     AudioDeviceIOProcID _procId;
     AudioDeviceID _deviceId;
     MHRingBuffer *_ringBuffer;
+    int _frameSize;
     int _frameByteSize;
     int _numFrames;
     Float32 *_buffer;
@@ -51,9 +52,11 @@
         _numChannels = streamConfiguration.mBuffers[0].mNumberChannels;
         _frameByteSize = streamConfiguration.mBuffers[0].mDataByteSize;
         _numFrames = size / _frameByteSize;
-        _shift = (_numFrames - 1) * _frameByteSize / sizeof(Float32);
+        _frameSize = _frameByteSize / sizeof(Float32);
+        _shift = (_numFrames - 1) * _frameSize;
 
         _buffer = malloc(size);
+        memset(_buffer, 0, size);
 
         _ringBuffer = [[MHRingBuffer alloc] initWithCapacity:_numFrames * 4 andItemSize:_frameByteSize];
 
@@ -62,6 +65,8 @@
                 [_ringBuffer give:inInputData->mBuffers[0].mData];
             }
         });
+
+        AudioDeviceStart(_deviceId, _procId);
     }
     return self;
 }
@@ -73,11 +78,6 @@
 
 - (void *)getBuffer
 {
-    static BOOL started = NO;
-    if (!started)
-        AudioDeviceStart(_deviceId, _procId);
-
-    // take all ringbuffer frames -> internal buffer
     @synchronized(_ringBuffer) {
         if ([_ringBuffer state] == kMHRingBufferStateNormal || [_ringBuffer state] == kMHRingBufferStateOverflowImminent) {
             while ([_ringBuffer size]) {
