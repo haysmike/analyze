@@ -65,6 +65,12 @@
 - (void)prepareOpenGL
 {
 	CGLEnable([[self openGLContext] CGLContextObj], kCGLCECrashOnRemovedFunctions);
+
+
+    glEnable(GL_LINE_SMOOTH);
+
+    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+
     const GLchar *vertex_code = [self loadShaderFromFile:@"analyze.vert"];
     const GLchar *fragment_code = [self loadShaderFromFile:@"analyze.frag"];
 
@@ -81,9 +87,6 @@
     glVertexAttribPointer(0, 1, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(0));
     glEnableVertexAttribArray(0);
 
-
-
-//    glPointSize(2.0);
 
 
 
@@ -114,8 +117,6 @@
 
     glUseProgram(_program);
 
-
-    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
 //    magnitude = malloc(NUM_CHANNELS * FFT_SIZE * sizeof(Float32));
 
