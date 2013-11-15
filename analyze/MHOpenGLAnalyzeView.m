@@ -39,107 +39,199 @@
     vDSP_Length LOG2N;
 
     MHFFT *_fft;
+
+    CVDisplayLinkRef displayLink;
 }
 
-- (id)initWithCoder:(NSCoder *)aDecoder
+
+- (CVReturn)getFrameForTime:(const CVTimeStamp*)outputTime
 {
-    self = [super initWithCoder:aDecoder];
-    if (self) {
-        NSOpenGLPixelFormatAttribute attr[] = {
-//            NSOpenGLPFAOpenGLProfile, NSOpenGLProfileVersion3_2Core, // Needed if using opengl 3.2 you can comment this line out to use the old version.
-//            NSOpenGLPFAColorSize,     24,
-//            NSOpenGLPFAAlphaSize,     8,
-            NSOpenGLPFAAccelerated,
-//            NSOpenGLPFADoubleBuffer,
-//            0
-            NSOpenGLPFADoubleBuffer,
-//            NSOpenGLPFADepthSize,       24,
-            NSOpenGLPFAOpenGLProfile,   NSOpenGLProfileVersion3_2Core,
-            0
-        };
-        [self setPixelFormat:[[NSOpenGLPixelFormat alloc] initWithAttributes:attr]];
+    @autoreleasepool {
+        [self drawView];
     }
-    return self;
+	return kCVReturnSuccess;
+}
+
+// This is the renderer output callback function
+static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink,
+									  const CVTimeStamp* now,
+									  const CVTimeStamp* outputTime,
+									  CVOptionFlags flagsIn,
+									  CVOptionFlags* flagsOut,
+									  void* displayLinkContext)
+{
+    CVReturn result = [(__bridge MHOpenGLAnalyzeView *)displayLinkContext getFrameForTime:outputTime];
+    return result;
+}
+
+- (void)awakeFromNib
+{
+    NSOpenGLPixelFormatAttribute attrs[] =
+	{
+		NSOpenGLPFADoubleBuffer,
+		NSOpenGLPFADepthSize, 24,
+		NSOpenGLPFAOpenGLProfile,
+		NSOpenGLProfileVersion3_2Core,
+		0
+	};
+
+	NSOpenGLPixelFormat *pf = [[NSOpenGLPixelFormat alloc] initWithAttributes:attrs];
+
+	if (!pf)
+	{
+		NSLog(@"No OpenGL pixel format");
+	}
+
+    NSOpenGLContext* context = [[NSOpenGLContext alloc] initWithFormat:pf shareContext:nil];
+	CGLEnable([context CGLContextObj], kCGLCECrashOnRemovedFunctions);
+    [self setPixelFormat:pf];
+    [self setOpenGLContext:context];
 }
 
 - (void)prepareOpenGL
 {
-	CGLEnable([[self openGLContext] CGLContextObj], kCGLCECrashOnRemovedFunctions);
+	[super prepareOpenGL];
+	[self initGL];
+	CVDisplayLinkCreateWithActiveCGDisplays(&displayLink);
 
+	// Set the renderer output callback function
+	CVDisplayLinkSetOutputCallback(displayLink, &MyDisplayLinkCallback, (__bridge void *)(self));
 
-    glEnable(GL_LINE_SMOOTH);
+	// Set the display link for the current renderer
+	CGLContextObj cglContext = [[self openGLContext] CGLContextObj];
+	CGLPixelFormatObj cglPixelFormat = [[self pixelFormat] CGLPixelFormatObj];
+	CVDisplayLinkSetCurrentCGDisplayFromOpenGLContext(displayLink, cglContext, cglPixelFormat);
 
-    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	// Activate the display link
+	CVDisplayLinkStart(displayLink);
 
-    const GLchar *vertex_code = [self loadShaderFromFile:@"analyze.vert"];
-    const GLchar *fragment_code = [self loadShaderFromFile:@"analyze.frag"];
-
-    GLint status;
-    char infoLog[4096];
-    GLsizei length;
-
-    glGenVertexArrays(1, &_vao);
-    glBindVertexArray(_vao);
-
-    glGenBuffers(1, &_vbo);
-    glBindBuffer(GL_ARRAY_BUFFER, _vbo);
-
-    glVertexAttribPointer(0, 1, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(0));
-    glEnableVertexAttribArray(0);
-
-
-
-
-    GLuint vertex_shader = glCreateShader(GL_VERTEX_SHADER);
-    glShaderSource(vertex_shader, 1, (const GLchar **) &vertex_code, NULL);
-    glCompileShader(vertex_shader);
-    glGetShaderiv(vertex_shader, GL_COMPILE_STATUS, &status);
-    if (status == GL_FALSE) {
-        glGetShaderInfoLog(vertex_shader, 4096, &length, infoLog);
-        printf("%s", infoLog);
-    }
-
-    GLuint fragment_shader = glCreateShader(GL_FRAGMENT_SHADER);
-    glShaderSource(fragment_shader, 1, (const GLchar **) &fragment_code, NULL);
-    glCompileShader(fragment_shader);
-
-    glGetShaderiv(fragment_shader, GL_COMPILE_STATUS, &status);
-    _program = glCreateProgram();
-
-    glAttachShader(_program, vertex_shader);
-    glAttachShader(_program, fragment_shader);
-    glLinkProgram(_program);
-    glGetProgramiv(_program, GL_LINK_STATUS, &status);
-    if (status == GL_FALSE) {
-        glGetProgramInfoLog(_program, 4096, &length, infoLog);
-        printf("%s", infoLog);
-    }
-
-    glUseProgram(_program);
-
-
-//    magnitude = malloc(NUM_CHANNELS * FFT_SIZE * sizeof(Float32));
-
-    _fft = [[MHFFT alloc] initWithLength:FFT_SIZE];
-    _shovel = [[MHCoreAudioShovel alloc] initWithBufferSize:NUM_CHANNELS * FFT_SIZE * sizeof(Float32)];
+	// Register to be notified when the window closes so we can stop the displaylink
+	[[NSNotificationCenter defaultCenter] addObserver:self
+											 selector:@selector(windowWillClose:)
+												 name:NSWindowWillCloseNotification
+											   object:[self window]];
 }
 
-- (void)drawRect:(NSRect)dirtyRect
+- (void)windowWillClose:(NSNotification*)notification
 {
-	[super drawRect:dirtyRect];
+	// Stop the display link when the window is closing because default
+	// OpenGL render buffers will be destroyed.  If display link continues to
+	// fire without renderbuffers, OpenGL draw calls will set errors.
 
-    magnitude = [_fft forward:[_shovel getBuffer]];
-    glClear(GL_COLOR_BUFFER_BIT);
-    glBindVertexArray(_vao);
-    glBufferData(GL_ARRAY_BUFFER, FFT_SIZE / 2 * sizeof(Float32), magnitude, GL_STATIC_DRAW);
-    glDrawArrays(GL_LINE_STRIP, 0, FFT_SIZE / 2);
-    glSwapAPPLE();
+	CVDisplayLinkStop(displayLink);
+}
 
-    // TODO: performance analysis
+- (void)initGL
+{
+	[[self openGLContext] makeCurrentContext];
 
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [self setNeedsDisplay:YES];
-    });
+	GLint swapInt = 1;
+	[[self openGLContext] setValues:&swapInt forParameter:NSOpenGLCPSwapInterval];
+
+	{
+        glEnable(GL_LINE_SMOOTH);
+
+        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+
+        const GLchar *vertex_code = [self loadShaderFromFile:@"analyze.vert"];
+        const GLchar *fragment_code = [self loadShaderFromFile:@"analyze.frag"];
+
+        GLint status;
+        char infoLog[4096];
+        GLsizei length;
+
+        glGenVertexArrays(1, &_vao);
+        glBindVertexArray(_vao);
+
+        glGenBuffers(1, &_vbo);
+        glBindBuffer(GL_ARRAY_BUFFER, _vbo);
+
+        glVertexAttribPointer(0, 1, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(0));
+        glEnableVertexAttribArray(0);
+
+
+
+
+        GLuint vertex_shader = glCreateShader(GL_VERTEX_SHADER);
+        glShaderSource(vertex_shader, 1, (const GLchar **) &vertex_code, NULL);
+        glCompileShader(vertex_shader);
+        glGetShaderiv(vertex_shader, GL_COMPILE_STATUS, &status);
+        if (status == GL_FALSE) {
+            glGetShaderInfoLog(vertex_shader, 4096, &length, infoLog);
+            printf("%s", infoLog);
+        }
+
+        GLuint fragment_shader = glCreateShader(GL_FRAGMENT_SHADER);
+        glShaderSource(fragment_shader, 1, (const GLchar **) &fragment_code, NULL);
+        glCompileShader(fragment_shader);
+
+        glGetShaderiv(fragment_shader, GL_COMPILE_STATUS, &status);
+        _program = glCreateProgram();
+
+        glAttachShader(_program, vertex_shader);
+        glAttachShader(_program, fragment_shader);
+        glLinkProgram(_program);
+        glGetProgramiv(_program, GL_LINK_STATUS, &status);
+        if (status == GL_FALSE) {
+            glGetProgramInfoLog(_program, 4096, &length, infoLog);
+            printf("%s", infoLog);
+        }
+
+        glUseProgram(_program);
+        
+        
+        //    magnitude = malloc(NUM_CHANNELS * FFT_SIZE * sizeof(Float32));
+        
+        _fft = [[MHFFT alloc] initWithLength:FFT_SIZE];
+        _shovel = [[MHCoreAudioShovel alloc] initWithBufferSize:NUM_CHANNELS * FFT_SIZE * sizeof(Float32)];
+    }
+}
+
+- (void) reshape
+{
+	[super reshape];
+
+	CGLLockContext([[self openGLContext] CGLContextObj]);
+
+    NSRect viewRectPixels = [self bounds];
+	glViewport(0, 0, viewRectPixels.size.width, viewRectPixels.size.height);
+
+	CGLUnlockContext([[self openGLContext] CGLContextObj]);
+}
+
+
+- (void)renewGState
+{
+	[[self window] disableScreenUpdatesUntilFlush];
+	[super renewGState];
+}
+
+- (void)drawRect:(NSRect) theRect
+{
+	[self drawView];
+}
+
+- (void)drawView
+{
+	[[self openGLContext] makeCurrentContext];
+	CGLLockContext([[self openGLContext] CGLContextObj]);
+
+	{
+        magnitude = [_fft forward:[_shovel getBuffer]];
+        glClear(GL_COLOR_BUFFER_BIT);
+        glBindVertexArray(_vao);
+        glBufferData(GL_ARRAY_BUFFER, FFT_SIZE / 2 * sizeof(Float32), magnitude, GL_STATIC_DRAW);
+        glDrawArrays(GL_LINE_STRIP, 0, FFT_SIZE / 2);
+    }
+
+	CGLFlushDrawable([[self openGLContext] CGLContextObj]);
+	CGLUnlockContext([[self openGLContext] CGLContextObj]);
+}
+
+- (void)dealloc
+{
+	CVDisplayLinkStop(displayLink);
+	CVDisplayLinkRelease(displayLink);
 }
 
 - (const GLchar *)loadShaderFromFile:(NSString *)fileName
