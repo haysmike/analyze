@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		69AB4B6B1836983D000170C9 /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 69AB4B6A1836983D000170C9 /* CoreVideo.framework */; };
 		BF453025182CB49600CE042D /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF453024182CB49600CE042D /* Accelerate.framework */; };
 		BF5ED73D182D85DF00C8A7DF /* MHCoreAudioShovel.m in Sources */ = {isa = PBXBuildFile; fileRef = BF5ED73C182D85DF00C8A7DF /* MHCoreAudioShovel.m */; };
 		BF5ED740182D860D00C8A7DF /* MHOpenGLAnalyzeView.m in Sources */ = {isa = PBXBuildFile; fileRef = BF5ED73F182D860D00C8A7DF /* MHOpenGLAnalyzeView.m */; };
@@ -33,6 +34,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		69AB4B6A1836983D000170C9 /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = System/Library/Frameworks/CoreVideo.framework; sourceTree = SDKROOT; };
 		BF453024182CB49600CE042D /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
 		BF5ED73B182D85DF00C8A7DF /* MHCoreAudioShovel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MHCoreAudioShovel.h; sourceTree = "<group>"; };
 		BF5ED73C182D85DF00C8A7DF /* MHCoreAudioShovel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MHCoreAudioShovel.m; sourceTree = "<group>"; };
@@ -70,6 +72,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				69AB4B6B1836983D000170C9 /* CoreVideo.framework in Frameworks */,
 				BFC080041833670B00E5A9C1 /* AppKit.framework in Frameworks */,
 				BF453025182CB49600CE042D /* Accelerate.framework in Frameworks */,
 				BF6E6AB8181341D100F74101 /* CoreAudio.framework in Frameworks */,
@@ -113,6 +116,7 @@
 		BF6E6A8118131A4400F74101 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				69AB4B6A1836983D000170C9 /* CoreVideo.framework */,
 				BFC080031833670B00E5A9C1 /* AppKit.framework */,
 				BFCFCEA1182CD75400E325E8 /* OpenGL.framework */,
 				BF453024182CB49600CE042D /* Accelerate.framework */,
