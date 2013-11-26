@@ -27,6 +27,7 @@
 		BF7DD9B01832183B00C80DB6 /* MHRingBuffer.m in Sources */ = {isa = PBXBuildFile; fileRef = BF7DD9AF1832183B00C80DB6 /* MHRingBuffer.m */; };
 		BF7DD9CB1833404900C80DB6 /* MHRingBuffer.m in Sources */ = {isa = PBXBuildFile; fileRef = BF7DD9AF1832183B00C80DB6 /* MHRingBuffer.m */; };
 		BF862EF0183387140088A372 /* fftTests.m in Sources */ = {isa = PBXBuildFile; fileRef = BF999B40183360C00030EF0F /* fftTests.m */; };
+		BF9426391837292E00DDC1DA /* MHAnalyzeRenderer.m in Sources */ = {isa = PBXBuildFile; fileRef = BF9426381837292E00DDC1DA /* MHAnalyzeRenderer.m */; };
 		BF999B44183362030030EF0F /* MHFFT.m in Sources */ = {isa = PBXBuildFile; fileRef = BF999B43183362030030EF0F /* MHFFT.m */; };
 		BF999B45183362030030EF0F /* MHFFT.m in Sources */ = {isa = PBXBuildFile; fileRef = BF999B43183362030030EF0F /* MHFFT.m */; };
 		BFC080041833670B00E5A9C1 /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BFC080031833670B00E5A9C1 /* AppKit.framework */; };
@@ -60,6 +61,8 @@
 		BF6E6AB7181341D100F74101 /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = System/Library/Frameworks/CoreAudio.framework; sourceTree = SDKROOT; };
 		BF7DD9AE1832183B00C80DB6 /* MHRingBuffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MHRingBuffer.h; sourceTree = "<group>"; };
 		BF7DD9AF1832183B00C80DB6 /* MHRingBuffer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MHRingBuffer.m; sourceTree = "<group>"; };
+		BF9426371837292E00DDC1DA /* MHAnalyzeRenderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MHAnalyzeRenderer.h; sourceTree = "<group>"; };
+		BF9426381837292E00DDC1DA /* MHAnalyzeRenderer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MHAnalyzeRenderer.m; sourceTree = "<group>"; };
 		BF999B40183360C00030EF0F /* fftTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = fftTests.m; sourceTree = "<group>"; };
 		BF999B42183362030030EF0F /* MHFFT.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MHFFT.h; sourceTree = "<group>"; };
 		BF999B43183362030030EF0F /* MHFFT.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MHFFT.m; sourceTree = "<group>"; };
@@ -142,6 +145,8 @@
 				BF7DD9AF1832183B00C80DB6 /* MHRingBuffer.m */,
 				BF999B42183362030030EF0F /* MHFFT.h */,
 				BF999B43183362030030EF0F /* MHFFT.m */,
+				BF9426371837292E00DDC1DA /* MHAnalyzeRenderer.h */,
+				BF9426381837292E00DDC1DA /* MHAnalyzeRenderer.m */,
 			);
 			path = analyze;
 			sourceTree = "<group>";
@@ -277,6 +282,7 @@
 				BF5ED73D182D85DF00C8A7DF /* MHCoreAudioShovel.m in Sources */,
 				BF999B44183362030030EF0F /* MHFFT.m in Sources */,
 				BF5ED740182D860D00C8A7DF /* MHOpenGLAnalyzeView.m in Sources */,
+				BF9426391837292E00DDC1DA /* MHAnalyzeRenderer.m in Sources */,
 				BF7DD9B01832183B00C80DB6 /* MHRingBuffer.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

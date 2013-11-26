@@ -13,7 +13,7 @@
     UInt32 _length;
     FFTSetup _setup;
     vDSP_Length _log2Length;
-    Float32 *_window;
+//    Float32 *_window;
 
     DSPSplitComplex _deinterleavedSamples;
 
@@ -30,9 +30,13 @@
         _log2Length = log2f(_length);
         _setup = vDSP_create_fftsetup(_log2Length, FFT_RADIX2);
 
-        _window = (Float32 *) malloc(sizeof(float) * _length);
-        memset(_window, 0, sizeof(float) * _length);
-        vDSP_hamm_window(_window, _length, 0);
+//        _window = (Float32 *) malloc(sizeof(float) * _length);
+//        memset(_window, 0, sizeof(float) * _length);
+//        for (int i = 0; i < _length; i++) {
+//            _window[i] = 1.0 /;
+//        }
+//        vDSP_hamm_window(_window, _length, 0);
+//        vDSP_hann_window(_window, _length, vDSP_HANN_NORM);
 
         //    Float32 scale = 1.0f / (float)(4.0f * _size);
 
@@ -52,7 +56,7 @@
 - (void)dealloc
 {
     vDSP_destroy_fftsetup(_setup);
-    free(_window);
+//    free(_window);
     free(_deinterleavedSamples.realp);
     free(_deinterleavedSamples.imagp);
     free(_samples);
@@ -64,17 +68,12 @@
 - (Float32 *)forward:(Float32 *)interleavedSamples
 {
     vDSP_ctoz((DSPComplex *)interleavedSamples, 2, &_deinterleavedSamples, 1, _length);
-
-
-    vDSP_vmul(_deinterleavedSamples.realp, 1, _window, 1, _samples, 1, _length);
-    vDSP_ctoz((DSPComplex *)_samples, 2, &_splitSamples, 1, _length / 2);
-
-//    vDSP_ctoz((DSPComplex *)_deinterleavedSamples.realp, 2, &_splitSamples, 1, _length / 2);
-
-
+    vDSP_ctoz((DSPComplex *)_deinterleavedSamples.realp, 2, &_splitSamples, 1, _length / 2);
     vDSP_fft_zrip(_setup, &_splitSamples, 1, _log2Length, FFT_FORWARD);
 
-    _splitSamples.imagp[0] = 0.0;   // wtf? does this have something to do with packing?
+    // dc phase is always zero, so vDSP_fft methods store the real response at
+    // the nyquist frequency in imagp[0]
+    _splitSamples.imagp[0] = 0.0;
 
     vDSP_vdist(_splitSamples.realp, 1, _splitSamples.imagp, 1, _magnitude, 1, _length / 2);
     return _magnitude;   // phase?

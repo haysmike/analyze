@@ -46,10 +46,9 @@
 - (void)testForwardFft
 {
     _outputValues = [_fft forward:_inputValues];
-    XCTAssert(_outputValues[0] > 1000.0f);
-    XCTAssert(_outputValues[1] > 400.0f);
-    for (int i = 2; i < FFT_SIZE / 2; i++) {
-        XCTAssert(_outputValues[i] < 0.0001);
+    XCTAssert(_outputValues[0] == (float)FFT_SIZE * 2.0f);
+    for (int i = 1; i < FFT_SIZE / 2; i++) {
+        XCTAssert(_outputValues[i] == 0.0);
     }
 }
 
