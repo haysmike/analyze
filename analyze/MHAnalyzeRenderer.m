@@ -24,6 +24,7 @@
 @implementation MHAnalyzeRenderer {
     MHFFT *_fft;
     MHCoreAudioShovel *_shovel;
+    Float32 *_buffer;
     GLuint _vao;
     GLuint _vbo;
     GLuint _program;
@@ -82,7 +83,11 @@
         glUseProgram(_program);
 
         _fft = [[MHFFT alloc] initWithLength:FFT_SIZE];
-        _shovel = [[MHCoreAudioShovel alloc] initWithBufferSize:NUM_CHANNELS * FFT_SIZE * sizeof(Float32)];
+
+        int size = NUM_CHANNELS * FFT_SIZE * sizeof(Float32);
+        _buffer = malloc(size);
+        memset(_buffer, 0, size);
+        _shovel = [[MHCoreAudioShovel alloc] initWithBufferSize:size];
     }
     return self;
 }
@@ -94,7 +99,8 @@
 
 - (void)draw
 {
-    _magnitudes = [_fft forward:[_shovel getBuffer]];
+    [_shovel getBuffer:_buffer];
+    _magnitudes = [_fft forward:_buffer];
     glClear(GL_COLOR_BUFFER_BIT);
     glBindVertexArray(_vao);
     glBufferData(GL_ARRAY_BUFFER, FFT_SIZE / 2 * sizeof(Float32), _magnitudes, GL_STATIC_DRAW);
@@ -107,6 +113,11 @@
     NSStringEncoding encoding;
     NSString *code = [[NSString alloc] initWithContentsOfFile:path usedEncoding:&encoding error:nil];
     return [code cStringUsingEncoding:encoding];
+}
+
+- (void)dealloc
+{
+    free(_buffer);
 }
 
 @end

@@ -9,7 +9,7 @@
 @interface MHCoreAudioShovel : NSObject
 
 - (id)initWithBufferSize:(int)size;
-- (void *)getBuffer;
+- (void)getBuffer:(void *)buffer;
 
 @property (readonly) UInt32 numChannels;
 

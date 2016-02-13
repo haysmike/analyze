@@ -22,7 +22,6 @@
     int _frameSize;
     int _frameByteSize;
     int _numFrames;
-    Float32 *_buffer;
     int _shift;;
 }
 
@@ -72,9 +71,6 @@
         NSLog(@"- Frames per buffer: %i", _numFrames);
         NSLog(@"- Samples per frame: %i", _frameSize);
 
-        _buffer = malloc(size);
-        memset(_buffer, 0, size);
-
         _ringBuffer = [[MHRingBuffer alloc] initWithCapacity:_numFrames * BUFFER_SIZE_MULTIPLIER
                                                  andItemSize:_frameByteSize];
 
@@ -97,27 +93,23 @@
     return self;
 }
 
-- (void)dealloc
-{
-    free(_buffer);
-}
-
-- (void *)getBuffer
+- (void)getBuffer:(void *)buffer
 {
     @synchronized(_ringBuffer) {
+        MHRingBufferState state = [_ringBuffer state];
         // todo: handle other states
-        if ([_ringBuffer state] == kMHRingBufferStateNormal ||
-            [_ringBuffer state] == kMHRingBufferStateOverflowImminent) {
+        if (state == kMHRingBufferStateNormal ||
+            state == kMHRingBufferStateOverflowImminent) {
+
             void *ptr = NULL;
             while ([_ringBuffer size]) {
                 ptr = [_ringBuffer take];
             }
             if (ptr) {
-                memcpy(_buffer, ptr, _frameByteSize);
+                memcpy(buffer, ptr, _frameByteSize);
             }
         }
     }
-    return _buffer;
 }
 
 @end
