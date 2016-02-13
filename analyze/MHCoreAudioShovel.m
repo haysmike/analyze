@@ -13,7 +13,7 @@
 
 #import "MHRingBuffer.h"
 
-#define BUFFER_SIZE_MULTIPLIER 4
+#define BUFFER_SIZE_MULTIPLIER 8
 
 @implementation MHCoreAudioShovel {
     AudioDeviceIOProcID _procId;
