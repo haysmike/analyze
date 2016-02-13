@@ -112,4 +112,10 @@
     }
 }
 
+- (void)stop
+{
+    AudioDeviceDestroyIOProcID(_deviceId, _procId);
+    AudioDeviceStop(_deviceId, _procId);
+}
+
 @end

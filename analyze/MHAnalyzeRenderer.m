@@ -117,6 +117,7 @@
 
 - (void)dealloc
 {
+    [_shovel stop];
     free(_buffer);
 }
 

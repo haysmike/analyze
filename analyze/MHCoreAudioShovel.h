@@ -10,6 +10,7 @@
 
 - (id)initWithBufferSize:(int)size;
 - (void)getBuffer:(void *)buffer;
+- (void)stop;
 
 @property (readonly) UInt32 numChannels;
 

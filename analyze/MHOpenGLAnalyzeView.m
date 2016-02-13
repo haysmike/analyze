@@ -81,6 +81,7 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink,
 - (void)windowWillClose:(NSNotification*)notification
 {
 	CVDisplayLinkStop(displayLink);
+    _renderer = nil;
 }
 
 - (void)initGL
