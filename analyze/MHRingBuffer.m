@@ -40,7 +40,8 @@
         _state = kMHRingBufferStateNormal;
     }
 
-    memcpy(_buffer + _writeOffset * _itemSize, item, _itemSize);    // TODO: not sure memcpy should be here
+    memcpy(_buffer + _writeOffset * _itemSize, item, _itemSize);
+
     _writeOffset = (_writeOffset + 1) % _numItems;
     if (_writeOffset == _readOffset) {
         _state = kMHRingBufferStateOverflowImminent;

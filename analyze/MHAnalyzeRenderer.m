@@ -36,8 +36,6 @@
 {
     self = [super init];
     if (self) {
-//        glEnable(GL_LINE_SMOOTH);
-
         glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
         const GLchar *vertex_code = [self loadShaderFromFile:@"analyze.vert"];

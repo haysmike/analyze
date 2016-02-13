@@ -13,7 +13,6 @@
     UInt32 _length;
     FFTSetup _setup;
     vDSP_Length _log2Length;
-//    Float32 *_window;
 
     DSPSplitComplex _deinterleavedSamples;
 
@@ -29,16 +28,6 @@
         _length = length;
         _log2Length = log2f(_length);
         _setup = vDSP_create_fftsetup(_log2Length, FFT_RADIX2);
-
-//        _window = (Float32 *) malloc(sizeof(float) * _length);
-//        memset(_window, 0, sizeof(float) * _length);
-//        for (int i = 0; i < _length; i++) {
-//            _window[i] = 1.0 /;
-//        }
-//        vDSP_hamm_window(_window, _length, 0);
-//        vDSP_hann_window(_window, _length, vDSP_HANN_NORM);
-
-        //    Float32 scale = 1.0f / (float)(4.0f * _size);
 
         _deinterleavedSamples.realp = malloc(_length * sizeof(Float32));
         _deinterleavedSamples.imagp = malloc(_length * sizeof(Float32));
@@ -76,7 +65,7 @@
     _splitSamples.imagp[0] = 0.0;
 
     vDSP_vdist(_splitSamples.realp, 1, _splitSamples.imagp, 1, _magnitude, 1, _length / 2);
-    return _magnitude;   // phase?
+    return _magnitude;
 }
 
 @end

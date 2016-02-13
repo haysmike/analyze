@@ -25,7 +25,6 @@
 	return kCVReturnSuccess;
 }
 
-// This is the renderer output callback function
 static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink,
 									  const CVTimeStamp* now,
 									  const CVTimeStamp* outputTime,
@@ -94,7 +93,7 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink,
 	_renderer = [[MHAnalyzeRenderer alloc] init];
 }
 
-- (void) reshape
+- (void)reshape
 {
 	[super reshape];
 

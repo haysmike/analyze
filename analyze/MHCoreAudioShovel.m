@@ -13,6 +13,8 @@
 
 #import "MHRingBuffer.h"
 
+#define BUFFER_SIZE_MULTIPLIER 4
+
 @implementation MHCoreAudioShovel {
     AudioDeviceIOProcID _procId;
     AudioDeviceID _deviceId;
@@ -36,8 +38,13 @@
             kAudioObjectPropertyScopeGlobal,
             kAudioObjectPropertyElementMaster
         };
-        error = AudioObjectGetPropertyData(kAudioObjectSystemObject, &inputDeviceAddress, 0, NULL, &deviceIdSize, &_deviceId);
-        if (error) printf("\n* wow error: %i *\n\n", error);
+        error = AudioObjectGetPropertyData(kAudioObjectSystemObject,
+                                           &inputDeviceAddress,
+                                           0,
+                                           NULL,
+                                           &deviceIdSize,
+                                           &_deviceId);
+        if (error) printf("Error getting default audio device ID: %i *\n", error);
 
         AudioBufferList streamConfiguration;
         UInt32 streamConfigurationSize = sizeof(AudioBufferList);
@@ -46,25 +53,44 @@
             kAudioObjectPropertyScopeInput,
             kAudioObjectPropertyElementMaster
         };
-        error = AudioObjectGetPropertyData(_deviceId, &streamConfigurationAddress, 0, NULL, &streamConfigurationSize, &streamConfiguration);
-        if (error) printf("\n* wow error: %i *\n\n", error);
+        error = AudioObjectGetPropertyData(_deviceId,
+                                           &streamConfigurationAddress,
+                                           0,
+                                           NULL,
+                                           &streamConfigurationSize,
+                                           &streamConfiguration);
+        if (error) printf("Error getting stream configuration: %i *\n", error);
 
         _numChannels = streamConfiguration.mBuffers[0].mNumberChannels;
         _frameByteSize = streamConfiguration.mBuffers[0].mDataByteSize;
         _numFrames = size / _frameByteSize;
         _frameSize = _frameByteSize / sizeof(Float32);
         _shift = (_numFrames - 1) * _frameSize;
+        NSLog(@"Configuration:");
+        NSLog(@"- Channels: %i", _numChannels);
+        NSLog(@"- Frame Size: %i bytes", _frameByteSize);
+        NSLog(@"- Frames per buffer: %i", _numFrames);
+        NSLog(@"- Samples per frame: %i", _frameSize);
 
         _buffer = malloc(size);
         memset(_buffer, 0, size);
 
-        _ringBuffer = [[MHRingBuffer alloc] initWithCapacity:_numFrames * 4 andItemSize:_frameByteSize];
+        _ringBuffer = [[MHRingBuffer alloc] initWithCapacity:_numFrames * BUFFER_SIZE_MULTIPLIER
+                                                 andItemSize:_frameByteSize];
 
-        AudioDeviceCreateIOProcIDWithBlock(&_procId, _deviceId, NULL, ^(const AudioTimeStamp *inNow, const AudioBufferList *inInputData, const AudioTimeStamp *inInputTime, AudioBufferList *outOutputData, const AudioTimeStamp *inOutputTime) {
+        AudioDeviceIOBlock block = ^(const AudioTimeStamp *inNow,
+                                     const AudioBufferList *inInputData,
+                                     const AudioTimeStamp *inInputTime,
+                                     AudioBufferList *outOutputData,
+                                     const AudioTimeStamp *inOutputTime) {
             @synchronized(_ringBuffer) {
                 [_ringBuffer give:inInputData->mBuffers[0].mData];
             }
-        });
+        };
+        AudioDeviceCreateIOProcIDWithBlock(&_procId,
+                                           _deviceId,
+                                           NULL,
+                                           block);
 
         AudioDeviceStart(_deviceId, _procId);
     }
@@ -79,9 +105,10 @@
 - (void *)getBuffer
 {
     @synchronized(_ringBuffer) {
-        if ([_ringBuffer state] == kMHRingBufferStateNormal || [_ringBuffer state] == kMHRingBufferStateOverflowImminent) {
+        // todo: handle other states
+        if ([_ringBuffer state] == kMHRingBufferStateNormal ||
+            [_ringBuffer state] == kMHRingBufferStateOverflowImminent) {
             while ([_ringBuffer size]) {
-//                // probably inefficient
                 memmove(_buffer, _buffer + _frameByteSize, _shift);
                 Float32 *ptr = [_ringBuffer take];
                 memcpy(_buffer + _shift, ptr, _frameByteSize);
