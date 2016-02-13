@@ -226,7 +226,7 @@
 			isa = PBXProject;
 			attributes = {
 				CLASSPREFIX = MH;
-				LastUpgradeCheck = 0500;
+				LastUpgradeCheck = 0720;
 				ORGANIZATIONNAME = "Mike Hays";
 			};
 			buildConfigurationList = BF6E6A7A18131A4400F74101 /* Build configuration list for PBXProject "analyze" */;
@@ -352,6 +352,7 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
@@ -412,6 +413,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "analyze/analyze-Prefix.pch";
 				INFOPLIST_FILE = "analyze/analyze-Info.plist";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.mikehays.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -425,6 +427,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "analyze/analyze-Prefix.pch";
 				INFOPLIST_FILE = "analyze/analyze-Info.plist";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.mikehays.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -445,6 +448,7 @@
 					"$(inherited)",
 				);
 				INFOPLIST_FILE = "analyzeTests/analyzeTests-Info.plist";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.mikehays.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = xctest;
 			};
@@ -461,6 +465,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "analyze/analyze-Prefix.pch";
 				INFOPLIST_FILE = "analyzeTests/analyzeTests-Info.plist";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.mikehays.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = xctest;
 			};
