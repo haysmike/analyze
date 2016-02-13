@@ -108,10 +108,12 @@
         // todo: handle other states
         if ([_ringBuffer state] == kMHRingBufferStateNormal ||
             [_ringBuffer state] == kMHRingBufferStateOverflowImminent) {
+            void *ptr = NULL;
             while ([_ringBuffer size]) {
-                memmove(_buffer, _buffer + _frameByteSize, _shift);
-                Float32 *ptr = [_ringBuffer take];
-                memcpy(_buffer + _shift, ptr, _frameByteSize);
+                ptr = [_ringBuffer take];
+            }
+            if (ptr) {
+                memcpy(_buffer, ptr, _frameByteSize);
             }
         }
     }
